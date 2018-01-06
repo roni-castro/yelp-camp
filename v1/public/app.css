@@ -1,12 +1,8 @@
-ul{
-    list-style-type: none;
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.thumbnail{
-    float: left;
-}
-
-.thumbnail img{
-    width: 150px;
-    height: 150px;
+.caption{
+    overflow-wrap: break-word;
 }
