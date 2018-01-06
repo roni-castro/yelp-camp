@@ -1,3 +1,7 @@
+body {
+  padding-top: 65px;
+}
+
 .row.display-flex {
   display: flex;
   flex-wrap: wrap;
