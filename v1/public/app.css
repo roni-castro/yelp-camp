@@ -1,5 +1,6 @@
 body {
   padding-top: 65px;
+  padding-bottom: 65px;
 }
 
 .row.display-flex {
@@ -8,5 +9,11 @@ body {
 }
 
 .caption{
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.form-horizontal{
+  display:block;
+  width:40%;
+  margin: 0 auto;
 }
