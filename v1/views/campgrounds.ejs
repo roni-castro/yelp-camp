@@ -1,0 +1,16 @@
+<% include partials/landing.ejs %>
+<ul>
+    <h1>Campgrounds</h1>
+    <% camps.forEach(function(camp){ %>
+        <li>
+            <div class="thumbnail">
+               <%= camp.name %>
+               <img src="<%= camp.photo %>"></img>
+           </div>
+        </li>
+    <% }); %>
+</ul>
+<p>
+    <a href="/campgrounds/newCampground">New Campground</a>
+</p>
+<% include partials/footer.ejs %>

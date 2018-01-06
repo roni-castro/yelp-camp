@@ -1,0 +1,12 @@
+ul{
+    list-style-type: none;
+}
+
+.thumbnail{
+    float: left;
+}
+
+.thumbnail img{
+    width: 150px;
+    height: 150px;
+}
