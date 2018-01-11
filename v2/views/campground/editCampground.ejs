@@ -1,0 +1,30 @@
+<% include ../partials/header.ejs %>
+    <div class="container justify-content-center">
+        <h1 class="text-center">Edit campground</h1>
+        <form method="POST" action="/campgrounds/<%= camp.id %>?_method=PUT" class="form-center-wd-50">
+           <div class="form-row">
+                <div class="form-group">
+                     <label for="name">Camp name:</label>
+                    <input name="post[name]" class="form-control" type="text" value="<%= camp.name%>"></input>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="photo">Photo url:</label>
+                    <input name="post[photo]" class="form-control" type="text" value="<%= camp.photo%>"></input>
+                </div>
+           </div>
+           <div class="form-row">
+               <div class="form-group">
+                    <label for="desc">Description:</label>   
+                    <textarea class="form-control" rows="6" name="post[desc]"><%= camp.desc%></textarea>
+                </div>
+           </div>
+           <button type="submit" class="btn btn-primary btn-block">Save</button>
+           <div class="text-left">
+                <a href="/campgrounds">Back</a>
+           </div>
+        </form>
+    </div>
+
+<% include ../partials/footer.ejs %>

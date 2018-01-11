@@ -4,6 +4,15 @@ body {
   word-wrap: break-word;
 }
 
+.form-inline{
+  display: inline;
+}
+
+.form-center-wd-50{
+  margin: auto;
+  max-width: 50%;
+}
+
 .row.display-flex {
   display: flex;
   flex-wrap: wrap;

@@ -1,10 +1,11 @@
-var express     = require("express"),
-    app         = express(),
-    mongoose    = require("mongoose"),
-    bodyParser  = require("body-parser"),
-    Campground  = require("./models/Campground"),
-    Comment     = require("./models/Comment");
-    
+var express         = require("express"),
+    app             = express(),
+    mongoose        = require("mongoose"),
+    bodyParser      = require("body-parser"),
+    sanitazer       = require("express-sanitizer"),
+    methodOverride  = require("method-override"),
+    Campground      = require("./models/Campground"),
+    Comment         = require("./models/Comment");
     
 mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, function(err){
     if (err){
@@ -17,6 +18,8 @@ mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, functi
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
+app.use(sanitazer());
 
 app.get("/", function(req, res){
    res.redirect("/campgrounds"); 
@@ -39,6 +42,16 @@ app.get("/campgrounds/newCampground", function(req, res) {
      res.render("campground/newCampground"); 
 });
 
+app.get("/campgrounds/:id/editCampground", function(req, res) {
+    Campground.findById(req.params.id, function(err, foundCamp){
+       if(err){
+           console.log(err);
+       } else{
+           res.render("campground/editCampground", {camp: foundCamp});
+       }
+    });
+});
+
 app.get("/campgrounds/:id", function(req, res){
     console.log(req.params);
     Campground.findById(req.params.id, 
@@ -54,16 +67,8 @@ app.get("/campgrounds/:id", function(req, res){
 });
 
 app.post("/campgrounds", function(req, res){
-   var newCampName = req.body.name; 
-   var newCampPhoto = req.body.photo; 
-   var desc = req.body.desc;
-   var newCamp = {name: newCampName, photo: newCampPhoto, desc: desc};
-   saveNewCampToDB(newCamp);
-   res.redirect("/campgrounds");
-});
-
-function saveNewCampToDB(model){
-    Campground.create(model, 
+    req.body.post.desc = req.sanitize(req.body.post.desc);
+    Campground.create(req.body.post, 
     function(err, camp){
         if(err){
             console.log(err);
@@ -72,7 +77,29 @@ function saveNewCampToDB(model){
             console.log(camp);
         }
     });
-}
+   res.redirect("/campgrounds");
+});
+
+app.put("/campgrounds/:id", function(req, res){
+    req.body.post.desc = req.sanitize(req.body.post.desc);
+    Campground.findByIdAndUpdate(req.params.id, req.body.post, function(err, updatedPost){
+       if(err){
+           console.log(err);
+       } else{
+            res.redirect("/campgrounds");          
+       }
+    });
+});
+
+app.delete("/:id", function(req, res){
+    Campground.findByIdAndRemove(req.params.id, function(err){
+       if(err){
+            console.log(err);
+       } else{
+            res.redirect("/campgrounds");          
+       }
+    });
+});
 
 app.listen(process.env.PORT, process.env.IP, function(){
    console.log("Server is listening"); 

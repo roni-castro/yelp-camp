@@ -1,9 +1,14 @@
 <% include ../partials/header.ejs %>
-
     <div class="container">
         <h1 class="text-center"><%= camp.name %></h1>
-        <img class="img-fluid rounded mx-auto" src="<%- camp.photo %>"></img>
+        <img class="img-fluid img-rounded mx-auto d-block" src="<%= camp.photo %>">
         <p><%- camp.desc %></p>
+        <div class="text-center">
+            <a href="<%=camp.id%>/editCampground" class="btn btn-primary">Edit</a>
+            <form action="/<%= camp.id %>?_method=DELETE" method="POST" class="form-inline">
+               <button class="btn btn-warning">Delete</button>
+            </form>
+        </div>
     </div>
 
 <% include ../partials/footer.ejs %>

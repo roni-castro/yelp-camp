@@ -1,23 +1,23 @@
 <% include ../partials/header.ejs %>
     <div class="container justify-content-center">
         <h1 class="text-center">Create a new campground</h1>
-        <form method="POST" action="/campgrounds" class="form-horizontal">
+        <form method="POST" action="/campgrounds" class="form-center-wd-50">
            <div class="form-row">
                 <div class="form-group">
                      <label for="name">Camp name:</label>
-                    <input name="name" class="form-control" type="text" placeholder="Type the camp name"></input>
+                    <input name="post[name]" class="form-control" type="text" placeholder="Type the camp name"></input>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="photo">Photo url:</label>
-                    <input name="photo" class="form-control" type="text" placeholder="Type the photo url"></input>
+                    <input name="post[photo]" class="form-control" type="text" placeholder="Type the photo url"></input>
                 </div>
            </div>
            <div class="form-row">
                <div class="form-group">
                     <label for="desc">Description:</label>   
-                    <textarea class="form-control" rows="6" name="desc" placeholder="Description"></textarea>
+                    <textarea class="form-control" rows="6" name="post[desc]" placeholder="Description"></textarea>
                 </div>
            </div>
            <div class="text-center">
