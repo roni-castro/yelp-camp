@@ -1,52 +1,54 @@
 var express     = require("express"),
     app         = express(),
     mongoose    = require("mongoose"),
-    bodyParser  = require("body-parser");
+    bodyParser  = require("body-parser"),
+    Campground  = require("./models/Campground"),
+    Comment     = require("./models/Comment");
     
-mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true});
+    
+mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, function(err){
+    if (err){
+        throw err;
+    } else{
+        console.log('Mongo DB is connected');
+    }
+});
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
-
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    photo: String,
-    desc: String
-});
-var campgroundModel = mongoose.model("Campground", campgroundSchema);
 
 app.get("/", function(req, res){
    res.redirect("/campgrounds"); 
 });
 
 app.get("/campgrounds", function(req, res){
-    campgroundModel.find({}, 
+    Campground.find({}, 
     function(err, camps){
         if(err){
             console.log(err);
         } else {
             console.log("Camp found");
             console.log(camps);
-            res.render("campgrounds", {camps: camps});
+            res.render("campground/campgrounds", {camps: camps});
         }
     });   
-    console.log("Aqui");
 });
 
 app.get("/campgrounds/newCampground", function(req, res) {
-     res.render("newCampground"); 
+     res.render("campground/newCampground"); 
 });
 
 app.get("/campgrounds/:id", function(req, res){
     console.log(req.params);
-    campgroundModel.findById(req.params.id, 
+    Campground.findById(req.params.id, 
     function(err, foundCamp){
         if(err){
             console.log(err);
         } else {
             console.log("Camp found");
             console.log(foundCamp);
-            res.render("campgroundDetail", {camp: foundCamp});
+            res.render("campground/campgroundDetail", {camp: foundCamp});
         }
     });   
 });
@@ -61,7 +63,7 @@ app.post("/campgrounds", function(req, res){
 });
 
 function saveNewCampToDB(model){
-    campgroundModel.create(model, 
+    Campground.create(model, 
     function(err, camp){
         if(err){
             console.log(err);

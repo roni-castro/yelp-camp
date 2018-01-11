@@ -1,6 +1,7 @@
 body {
   padding-top: 65px;
   padding-bottom: 65px;
+  word-wrap: break-word;
 }
 
 .row.display-flex {
