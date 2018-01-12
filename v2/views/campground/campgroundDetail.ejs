@@ -9,6 +9,16 @@
                <button class="btn btn-warning">Delete</button>
             </form>
         </div>
+        <div class="segmented">
+            <a href="<%=camp.id%>/newComment" class="btn btn-primary">Add new Comment</a>
+            <% camp.comments.forEach(function(comment){ %>
+                <p><%= comment.author %></p>
+                <p><%= comment.createdAt %></p>
+                <p><%= comment.title %></p>
+                <p><%- comment.body %></p>
+                <hr/>
+            <% }); %>
+        </div>
     </div>
 
 <% include ../partials/footer.ejs %>

@@ -5,8 +5,10 @@ var express         = require("express"),
     sanitazer       = require("express-sanitizer"),
     methodOverride  = require("method-override"),
     Campground      = require("./models/Campground"),
-    Comment         = require("./models/Comment");
+    Comment         = require("./models/Comment"),
+    seedDB          = require("./seedDB");
     
+//seedDB();
 mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, function(err){
     if (err){
         throw err;
@@ -54,16 +56,32 @@ app.get("/campgrounds/:id/editCampground", function(req, res) {
 
 app.get("/campgrounds/:id", function(req, res){
     console.log(req.params);
-    Campground.findById(req.params.id, 
-    function(err, foundCamp){
-        if(err){
-            console.log(err);
-        } else {
-            console.log("Camp found");
-            console.log(foundCamp);
-            res.render("campground/campgroundDetail", {camp: foundCamp});
+    Campground.findById(req.params.id).populate("comments")
+    .exec(
+        function(err, foundCamp){
+            if(err){
+                console.log(err);
+            } else {
+                console.log("Camp found");
+                console.log(foundCamp);
+                res.render("campground/campgroundDetail", {camp: foundCamp});
+            }
         }
-    });   
+    );   
+});
+
+app.get("/campgrounds/:id/newComment", function(req, res){
+    Campground.findById(req.params.id,
+        function(err, foundCamp){
+            if(err){
+                console.log(err);
+            } else {
+                console.log("Camp found");
+                console.log(foundCamp);
+                res.render("comment/newComment", {camp: foundCamp});
+            }
+        }
+    );   
 });
 
 app.post("/campgrounds", function(req, res){
@@ -78,6 +96,33 @@ app.post("/campgrounds", function(req, res){
         }
     });
    res.redirect("/campgrounds");
+});
+
+app.post("/campgrounds/:id/newComment", function(req, res){
+    var reqCommentObj = req.body.comment;
+    var reqCommentParams = req.params;
+    reqCommentObj.body = req.sanitize(reqCommentObj.body);
+    Campground.findById(req.params.id, function(err, foundCamp){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Camp found");
+            console.log(foundCamp);
+            Comment.create(reqCommentObj, function(err, createdComment){
+                if(err){
+                    console.log(err);
+                } else{
+                    console.log(createdComment);
+                    console.log("============================");
+                    foundCamp.comments.push(createdComment);
+                    foundCamp.save();
+                    console.log("============================");
+                    console.log(foundCamp);
+                    res.redirect("/campgrounds/" + reqCommentParams.id);
+                }
+            });
+        }
+    });
 });
 
 app.put("/campgrounds/:id", function(req, res){
