@@ -70,7 +70,7 @@ app.get("/campgrounds/:id", function(req, res){
     );   
 });
 
-app.get("/campgrounds/:id/newComment", function(req, res){
+app.get("/campgrounds/:id/comments/newComment", function(req, res){
     Campground.findById(req.params.id,
         function(err, foundCamp){
             if(err){
@@ -98,7 +98,7 @@ app.post("/campgrounds", function(req, res){
    res.redirect("/campgrounds");
 });
 
-app.post("/campgrounds/:id/newComment", function(req, res){
+app.post("/campgrounds/:id/comments", function(req, res){
     var reqCommentObj = req.body.comment;
     var reqCommentParams = req.params;
     reqCommentObj.body = req.sanitize(reqCommentObj.body);
@@ -106,18 +106,12 @@ app.post("/campgrounds/:id/newComment", function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log("Camp found");
-            console.log(foundCamp);
             Comment.create(reqCommentObj, function(err, createdComment){
                 if(err){
                     console.log(err);
                 } else{
-                    console.log(createdComment);
-                    console.log("============================");
                     foundCamp.comments.push(createdComment);
                     foundCamp.save();
-                    console.log("============================");
-                    console.log(foundCamp);
                     res.redirect("/campgrounds/" + reqCommentParams.id);
                 }
             });

@@ -2,7 +2,7 @@
     <div class="container justify-content-center">
         <h1 class="text-center">New comment to camp: <%= camp.name%></h1> 
         <div class="form-center-wd-50">
-            <form method="POST" action="/campgrounds/<%= camp.id%>/newComment">
+            <form method="POST" action="/campgrounds/<%= camp.id%>/comments">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Title</label>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-row">
                      <div class="form-group">
-                         <label>Body</label>
+                         <label>Message</label>
                         <textarea name="comment[body]" rows="6" class="form-control"></textarea>
                     </div>
                 </div>

@@ -10,7 +10,7 @@
             </form>
         </div>
         <div class="segmented">
-            <a href="<%=camp.id%>/newComment" class="btn btn-primary">Add new Comment</a>
+            <a href="<%=camp.id%>/comments/newComment" class="btn btn-primary">Add new Comment</a>
             <% camp.comments.forEach(function(comment){ %>
                 <p><%= comment.author %></p>
                 <p><%= comment.createdAt %></p>
