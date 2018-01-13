@@ -47,14 +47,13 @@ function createCampgrounds(){
                 console.log("Failed to create Campgrounds");
             } else{
                 Comment.create(
-                    {author: "Roni", title: "Comment ", body: "Corpo do comentário "},
+                    {author: "Roni", body: "Corpo do comentário "},
                     function(err, createdComment){
                        if(err){
                            console.log("Error creating comment");
                        } else{
                            createdCamp.comments.push(createdComment);
                            createdCamp.save();
-                           console.log(createdCamp.comments);
                            console.log("Created comment successfully");
                        }
                     });

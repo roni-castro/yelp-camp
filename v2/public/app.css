@@ -4,6 +4,10 @@ body {
   word-wrap: break-word;
 }
 
+i {
+  margin-left: 8px;
+}
+
 .form-inline{
   display: inline;
 }

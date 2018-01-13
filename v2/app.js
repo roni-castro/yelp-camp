@@ -4,6 +4,7 @@ var express         = require("express"),
     bodyParser      = require("body-parser"),
     sanitazer       = require("express-sanitizer"),
     methodOverride  = require("method-override"),
+    moment          = require('moment'),
     Campground      = require("./models/Campground"),
     Comment         = require("./models/Comment"),
     seedDB          = require("./seedDB");
@@ -18,6 +19,7 @@ mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, functi
 });
 
 app.set("view engine", "ejs");
+app.locals.moment = require('moment');
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
@@ -125,7 +127,7 @@ app.put("/campgrounds/:id", function(req, res){
        if(err){
            console.log(err);
        } else{
-            res.redirect("/campgrounds");          
+            res.redirect("/campgrounds/" + req.params.id);          
        }
     });
 });
