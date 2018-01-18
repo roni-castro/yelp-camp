@@ -19,7 +19,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                   <% var formattedDate = moment(comment.createdAt).startOf('day').fromNow(); %>
-                  <strong><%= comment.author %></strong> commented on <%= formattedDate %>
+                  <strong><%= comment.author.username %></strong> commented on <%= formattedDate %>
                 </div>
                 <div class="card-block">
                     <p class="card-text"><%- comment.body %></p>

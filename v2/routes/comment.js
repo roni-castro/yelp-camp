@@ -8,14 +8,17 @@ router.post("/", isLoggedIn, function(req, res){
     var reqCommentObj = req.body.comment;
     var reqCommentParams = req.params;
     reqCommentObj.body = req.sanitize(reqCommentObj.body);
-    Campground.findById(req.params.id, function(err, foundCamp){
+    Campground.findById(reqCommentParams.id, function(err, foundCamp){
         if(err){
             console.log(err);
         } else {
             Comment.create(reqCommentObj, function(err, createdComment){
                 if(err){
                     console.log(err);
-                } else{
+                } else {
+                    createdComment.author.id = req.user.id;
+                    createdComment.author.username = req.user.username;
+                    createdComment.save();
                     foundCamp.comments.push(createdComment);
                     foundCamp.save();
                     res.redirect("/campgrounds/" + reqCommentParams.id);

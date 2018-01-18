@@ -6,11 +6,22 @@ var app = express();
 
 function seedDb(){
     removeAllCampgrounds();
-    createCampgrounds();
+    removeAllComments();
+    //createCampgrounds();
 }
 
 function removeAllCampgrounds(){
     Campground.remove(function(err){
+        if(err){
+            console.log("Failed to delete all campgrounds");
+        } else{
+            console.log("Removed all campgrounds successfully");
+        }
+    });
+}
+
+function removeAllComments(){
+    Comment.remove(function(err){
         if(err){
             console.log("Failed to delete all comments");
         } else{
