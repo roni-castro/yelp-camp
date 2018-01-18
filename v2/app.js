@@ -46,7 +46,7 @@ passport.use(new localStrategy(User.authenticate()));
 app.use(function(req, res, next){ 
     res.locals.currentUser = req.user;
     next();
-})
+});
 
 
 app.get("/", function(req, res){
@@ -125,6 +125,7 @@ app.post("/signup", function(req, res){
    User.register(new User(newUser), req.body.password, function(err, createdUser){
        if(err){
            console.log(err);
+           res.render("authentication/signup");
        } else{
            console.log(createdUser);
            passport.authenticate("local")(req, res, function(){
