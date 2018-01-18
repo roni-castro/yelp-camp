@@ -9,7 +9,6 @@ router.get("/", function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log(camps);
             res.render("campground/campgrounds", {camps: camps});
         }
     });   
@@ -26,7 +25,12 @@ router.get("/:id/editCampground", isLoggedIn, function(req, res) {
        if(err){
            console.log(err);
        } else{
-           res.render("campground/editCampground", {camp: foundCamp});
+           if(isAuthorizedToEditCampground(foundCamp.author.id, req.user.id)){
+                res.render("campground/editCampground", {camp: foundCamp});
+           } else{
+                res.redirect(req.get('referer'));
+           }
+           
        }
     });
 });
@@ -39,7 +43,6 @@ router.get("/:id", function(req, res){
             if(err){
                 console.log(err);
             } else {
-                console.log(foundCamp);
                 res.render("campground/campgroundDetail", {camp: foundCamp});
             }
         }
@@ -67,9 +70,7 @@ router.post("/", isLoggedIn, function(req, res){
     function(err, camp){
         if(err){
             console.log(err);
-        } else {
-            console.log(camp);
-        }
+        } 
     });
    res.redirect("/campgrounds");
 });
@@ -77,11 +78,20 @@ router.post("/", isLoggedIn, function(req, res){
 // Update Campground
 router.put("/:id", isLoggedIn, function(req, res){
     req.body.post.desc = req.sanitize(req.body.post.desc);
-    Campground.findByIdAndUpdate(req.params.id, req.body.post, function(err, updatedPost){
+    Campground.findById(req.params.id, function(err, foundCamp){
        if(err){
            console.log(err);
        } else{
-            res.redirect("/campgrounds/" + req.params.id);          
+           if (isAuthorizedToEditCampground(foundCamp.author.id, req.user.id)){
+               Campground.update(req.body.post, function(err, updatedCamp){
+                    if(err) {
+                        console.log(err);
+                    }
+                    res.redirect("/campgrounds/" + req.params.id); 
+               });
+            } else{
+                res.redirect("/campgrounds/" + req.params.id); 
+            }
        }
     });
 });
@@ -102,6 +112,11 @@ function isLoggedIn(req, res, next){
         return next();
     }
     res.redirect("/login");
+}
+
+function isAuthorizedToEditCampground(authorOfPost, userId) {
+    console.log(authorOfPost +" " + userId + " " + authorOfPost === userId);
+  return authorOfPost == userId;
 }
 
 module.exports = router;
