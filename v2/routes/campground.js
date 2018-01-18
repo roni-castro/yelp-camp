@@ -1,6 +1,6 @@
 var express         = require("express"),
     Campground      = require("../models/Campground"),
-    router          = express.Router({mergeParams: true});
+    router          = express.Router();
     
 // Show all campgrounds
 router.get("/", function(req, res){
@@ -16,12 +16,12 @@ router.get("/", function(req, res){
 });
 
 // Show new campground form page
-router.get("/newCampground", function(req, res) {
+router.get("/newCampground", isLoggedIn, function(req, res) {
      res.render("campground/newCampground"); 
 });
 
 // Edit an specific campground
-router.get("/:id/editCampground", function(req, res) {
+router.get("/:id/editCampground", isLoggedIn, function(req, res) {
     Campground.findById(req.params.id, function(err, foundCamp){
        if(err){
            console.log(err);
@@ -47,7 +47,7 @@ router.get("/:id", function(req, res){
 });
 
 // Create a new Campground
-router.post("/", function(req, res){
+router.post("/", isLoggedIn, function(req, res){
     req.body.post.desc = req.sanitize(req.body.post.desc);
     Campground.create(req.body.post, 
     function(err, camp){
@@ -61,7 +61,7 @@ router.post("/", function(req, res){
 });
 
 // Update Campground
-router.put("/:id", function(req, res){
+router.put("/:id", isLoggedIn, function(req, res){
     req.body.post.desc = req.sanitize(req.body.post.desc);
     Campground.findByIdAndUpdate(req.params.id, req.body.post, function(err, updatedPost){
        if(err){
@@ -73,7 +73,7 @@ router.put("/:id", function(req, res){
 });
 
 // Delete Campground
-router.delete("/:id", function(req, res){
+router.delete("/:id", isLoggedIn, function(req, res){
     Campground.findByIdAndRemove(req.params.id, function(err){
        if(err){
             console.log(err);
