@@ -2,20 +2,24 @@ var express         = require("express"),
     passport        = require("passport"),
     User            = require("../models/User"),
     router          = express.Router();
-    
+
+// Show login page
 router.get("/login", function(req, res){
    res.render("authentication/login"); 
 });
 
+// Show registration page
 router.get("/signup", function(req, res){
    res.render("authentication/signup"); 
 });
 
+// Logout user
 router.get("/logout", function(req, res){
    req.logout();
    res.redirect("/");
 });
 
+// Register user and logs him in
 router.post("/signup", function(req, res){
    console.log(req.body);
    var newUser = new User({username: req.body.username, name: req.body.name});
@@ -32,6 +36,7 @@ router.post("/signup", function(req, res){
    })
 });
 
+// Logs the use
 router.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
