@@ -116,6 +116,11 @@ app.get("/secret", isLoggedIn, function(req, res){
    res.render("authentication/secret"); 
 });
 
+app.get("/logout", function(req, res){
+   req.logout();
+   res.redirect("/");
+});
+
 app.post("/signup", function(req, res){
    console.log(req.body);
    var newUser = new User({username: req.body.username, name: req.body.name});
