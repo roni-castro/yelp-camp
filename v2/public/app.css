@@ -17,6 +17,27 @@ i {
   max-width: 50%;
 }
 
+
+.center{
+  margin: auto;
+}
+
+.wd-100{
+  max-width: 100%;
+}
+
+.wd-75{
+  max-width: 75%;
+}
+
+.wd-50{
+  max-width: 50%;
+}
+
+.wd-25{
+  max-width: 25%;
+}
+
 .row.display-flex {
   display: flex;
   flex-wrap: wrap;
