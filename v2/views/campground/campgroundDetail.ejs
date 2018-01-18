@@ -6,7 +6,7 @@
         <p><%- camp.desc %></p>
         <div class="text-center">
             <a href="<%=camp.id%>/editCampground" class="btn btn-primary">Edit</a>
-            <form action="/<%= camp.id %>?_method=DELETE" method="POST" class="form-inline">
+            <form action="/campgrounds/<%= camp.id %>?_method=DELETE" method="POST" class="form-inline">
                <button class="btn btn-warning">Delete</button>
             </form>
         </div>
