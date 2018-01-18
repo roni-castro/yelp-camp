@@ -4,6 +4,9 @@
         <h1 class="text-center"><%= camp.name %></h1>
         <img class="img-fluid img-rounded mx-auto d-block" src="<%= camp.photo %>">
         <p><%- camp.desc %></p>
+        <p>
+           <em>Created by <strong><%- camp.author.username %></strong></em>
+        </p>
         <div class="text-center">
             <a href="<%=camp.id%>/editCampground" class="btn btn-primary">Edit</a>
             <form action="/campgrounds/<%= camp.id %>?_method=DELETE" method="POST" class="form-inline">

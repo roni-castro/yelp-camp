@@ -48,8 +48,22 @@ router.get("/:id", function(req, res){
 
 // Create a new Campground
 router.post("/", isLoggedIn, function(req, res){
-    req.body.post.desc = req.sanitize(req.body.post.desc);
-    Campground.create(req.body.post, 
+    var post = req.body.post;
+    post.desc = req.sanitize(post.desc);
+    var name = post.name;
+    var desc = post.desc;
+    var photo = post.photo;
+    var author = {
+        id: req.user.id,
+        username: req.user.username
+    }
+    let cloned = Object.assign({}, post);
+    var campgroundToBeCreated = {name:name, photo:photo, desc:desc, author:author};
+    
+    console.log("########################################### " + cloned.name );
+    console.log("########################################### " + campgroundToBeCreated.author.username );
+
+    Campground.create(campgroundToBeCreated, 
     function(err, camp){
         if(err){
             console.log(err);
