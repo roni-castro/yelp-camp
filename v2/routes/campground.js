@@ -60,12 +60,7 @@ router.post("/", isLoggedIn, function(req, res){
         id: req.user.id,
         username: req.user.username
     }
-    let cloned = Object.assign({}, post);
     var campgroundToBeCreated = {name:name, photo:photo, desc:desc, author:author};
-    
-    console.log("########################################### " + cloned.name );
-    console.log("########################################### " + campgroundToBeCreated.author.username );
-
     Campground.create(campgroundToBeCreated, 
     function(err, camp){
         if(err){

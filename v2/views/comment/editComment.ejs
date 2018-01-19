@@ -1,0 +1,18 @@
+<% include ../partials/header.ejs %>
+    <div class="container justify-content-center">
+        <h1 class="text-center">Edit comment</h1> 
+        <div class="form-center-wd-50">
+            <form method="POST" action="/campgrounds/<%= camp.id%>/comments/<%= comment.id %>?_method=PUT">
+                <div class="form-row">
+                     <div class="form-group">
+                         <label>Message</label>
+                        <textarea name="comment[body]" rows="6" class="form-control"><%-comment.body %></textarea>
+                    </div>
+                </div>
+                <a href="/campgrounds/<%= camp.id%>/comments/<%=comment.id %>?_method=PUT">asdadas</a>
+                <button type="submit" class="btn btn-primary btn-block">Edit comment</button>
+            </form>
+        </div>
+    </div>
+
+<% include ../partials/footer.ejs %>
