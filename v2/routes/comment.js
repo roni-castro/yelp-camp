@@ -2,10 +2,11 @@ var express         = require("express"),
     Campground      = require("../models/Campground"),
     Comment         = require("../models/Comment"),
     sanitazer       = require("express-sanitizer"),
+    middlewareObj   = require("../middleware"),
     router          = express.Router({mergeParams: true});
 
 // Create a new comment to an specific campground
-router.post("/", isLoggedIn, function(req, res){
+router.post("/", middlewareObj.isLoggedIn, function(req, res){
     var reqCommentObj = req.body.comment;
     var reqCommentParams = req.params;
     reqCommentObj.body = req.sanitize(reqCommentObj.body);
@@ -30,7 +31,7 @@ router.post("/", isLoggedIn, function(req, res){
 });
 
 // Show form to create a new comment
-router.get("/newComment", isLoggedIn, function(req, res){
+router.get("/newComment", middlewareObj.isLoggedIn, function(req, res){
     Campground.findById(req.params.id,
         function(err, foundCamp){
             if(err){
@@ -43,7 +44,7 @@ router.get("/newComment", isLoggedIn, function(req, res){
 });
 
 //Show screen to edit comment
-router.get("/:comment_id/editComment", isLoggedIn, isOwnerOfComment, function(req, res){
+router.get("/:comment_id/editComment", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComment, function(req, res){
      Campground.findById(req.params.id, function(err, foundCamp){
         if(err){
             console.log(err);
@@ -61,7 +62,7 @@ router.get("/:comment_id/editComment", isLoggedIn, isOwnerOfComment, function(re
 });
 
 // Update a comment
-router.put("/:comment_id", isLoggedIn, isOwnerOfComment, function(req, res){
+router.put("/:comment_id", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComment, function(req, res){
    var commentToBeEdited = req.body.comment;
    commentToBeEdited.body = req.sanitize(commentToBeEdited.body);
    Comment.findByIdAndUpdate(req.params.comment_id, commentToBeEdited, function(err, foundComment){
@@ -75,7 +76,7 @@ router.put("/:comment_id", isLoggedIn, isOwnerOfComment, function(req, res){
 });
 
 // Delete an specific comment
-router.delete("/:comment_id", isLoggedIn, isOwnerOfComment, function(req, res){
+router.delete("/:comment_id", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComment, function(req, res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err, foundCamp){
         if(err){
             console.log(err);
@@ -85,36 +86,6 @@ router.delete("/:comment_id", isLoggedIn, isOwnerOfComment, function(req, res){
         }
        
     });          
-
 });
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-         return  next();
-    } else {
-        res.redirect("/login");
-    }
-}
-
-
-// Check if the user is owner of a comment 
-function isOwnerOfComment(req, res, next){
-     if(req.isAuthenticated()){
-         Comment.findById(req.params.comment_id, function(err, foundComment){
-           if(err){
-               console.log(err);
-               res.redirect("back");
-            } else {
-                if(foundComment.author.id.equals(req.user.id)){
-                    next();
-                } else{
-                    res.redirect("back");
-                }
-            }
-         });
-    } else {
-        res.redirect("/login");
-    }
-}
 
 module.exports = router;
