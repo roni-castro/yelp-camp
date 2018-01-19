@@ -29,7 +29,7 @@
                     <!-- Edit Comment -->
                     <% if(currentUser && comment.author.id.equals(currentUser.id)){ %>
                         <a class="btn btn-sm btn-warning" href="/campgrounds/<%= camp.id%>/comments/<%= comment.id %>/editComment">Edit</a>
-                        <form method="POST" action="/campgrounds/<%= camp.id%>/comments/<%= comment.id %>?_method=DELETE">
+                        <form method="POST" class="form-inline" action="/campgrounds/<%= camp.id%>/comments/<%= comment.id %>?_method=DELETE">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
                     <% } %>
