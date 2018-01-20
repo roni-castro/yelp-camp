@@ -1,0 +1,31 @@
+<% include ../partials/header.ejs %>
+<form action="/signup" method="POST">
+    <div class="center wd-25">
+        <!-- NAME FIELD-->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="name" class="form-control"/>
+            </div>
+        </div>
+        <!-- USER NAME FIELD-->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" class="form-control"/>
+            </div>
+        </div>
+        <!-- PASS FIELD-->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" class="form-control"/>
+            </div>
+        <div>
+        
+        <input type="submit" value="Sign up" class="btn btn-primary btn-block"/>
+        </div>
+    </div>
+</form>
+
+<% include ../partials/footer.ejs %>
