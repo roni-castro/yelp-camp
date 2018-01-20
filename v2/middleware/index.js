@@ -1,24 +1,25 @@
 var Comment = require("../models/Comment");
 var Campground = require("../models/Campground");
 var middlewareObj = {};
+var USER_NEEDS_TO_LOGIN_MSG = "You need to login to make this action";
 
 
 // Check if the user is logged in
 middlewareObj.isLoggedIn = function(req, res, next){
     if(req.isAuthenticated()){
-         return  next();
-    } else {
-        res.redirect("/login");
+         return next();
     }
+    req.flash("error", USER_NEEDS_TO_LOGIN_MSG);
+    res.redirect("/login");
 }
 
 // Check if the user is owner of a comment 
 middlewareObj.isOwnerOfComment = function (req, res, next){
      if(req.isAuthenticated()){
          Comment.findById(req.params.comment_id, function(err, foundComment){
-           if(err){
-               console.log(err);
-               res.redirect("back");
+           if(err || !foundComment){
+                req.flash("error", "Comment not found");
+                res.redirect("back");
             } else {
                 if(foundComment.author.id.equals(req.user.id)){
                     next();
@@ -28,6 +29,7 @@ middlewareObj.isOwnerOfComment = function (req, res, next){
             }
          });
     } else {
+        req.flash("error", USER_NEEDS_TO_LOGIN_MSG);
         res.redirect("/login");
     }
 }
@@ -37,9 +39,9 @@ middlewareObj.isOwnerOfComment = function (req, res, next){
 middlewareObj.isOwnerOfCampground = function(req, res, next){
      if(req.isAuthenticated()){
          Campground.findById(req.params.id, function(err, foundCamp){
-           if(err){
-               console.log(err);
-               res.redirect("back");
+           if(err || !foundCamp){
+                req.flash("error", "Campground not found");
+                res.redirect("back");
             } else {
                 if(foundCamp.author.id.equals(req.user.id)){
                     next();
@@ -49,6 +51,7 @@ middlewareObj.isOwnerOfCampground = function(req, res, next){
             }
          });
     } else {
+        req.flash("error", USER_NEEDS_TO_LOGIN_MSG);
         res.redirect("/login");
     }
 }

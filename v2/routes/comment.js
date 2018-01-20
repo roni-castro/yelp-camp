@@ -11,20 +11,24 @@ router.post("/", middlewareObj.isLoggedIn, function(req, res){
     var reqCommentParams = req.params;
     reqCommentObj.body = req.sanitize(reqCommentObj.body);
     Campground.findById(reqCommentParams.id, function(err, foundCamp){
-        if(err){
-            console.log(err);
+        if(err || !foundCamp){
+            req.flash("error", "Campground not found");
+            res.redirect("back");
         } else {
             Comment.create(reqCommentObj, function(err, createdComment){
                 if(err){
-                    console.log(err);
+                    req.flash("error", err.message);
+                } else if(!createdComment){
+                    req.flash("error", "Campground not found");
                 } else {
                     createdComment.author.id = req.user.id;
                     createdComment.author.username = req.user.username;
                     createdComment.save();
                     foundCamp.comments.push(createdComment);
                     foundCamp.save();
-                    res.redirect("/campgrounds/" + reqCommentParams.id);
+                    req.flash("success", "Comment posted successfully!");
                 }
+                res.redirect("/campgrounds/" + reqCommentParams.id);
             });
         }
     });
@@ -32,10 +36,10 @@ router.post("/", middlewareObj.isLoggedIn, function(req, res){
 
 // Show form to create a new comment
 router.get("/newComment", middlewareObj.isLoggedIn, function(req, res){
-    Campground.findById(req.params.id,
-        function(err, foundCamp){
-            if(err){
-                console.log(err);
+    Campground.findById(req.params.id, function(err, foundCamp){
+            if(err || !foundCamp){
+                req.flash("error", "Campground not found");
+                res.redirect("back");
             } else {
                 res.render("comment/newComment", {camp: foundCamp});
             }
@@ -46,13 +50,14 @@ router.get("/newComment", middlewareObj.isLoggedIn, function(req, res){
 //Show screen to edit comment
 router.get("/:comment_id/editComment", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComment, function(req, res){
      Campground.findById(req.params.id, function(err, foundCamp){
-        if(err){
-            console.log(err);
+        if(err || !foundCamp){
+            req.flash("error", "Campground not found");
+            res.redirect("back");
         } else {
             Comment.findById(req.params.comment_id, function(err, foundComment){
                 if(err){
-                    console.log(err);
-                    req.redirect(req.get("referer"));
+                    req.flash("error", "Comment not found");
+                    res.redirect("back");
                 } else{
                     res.render("comment/editComment", {camp: foundCamp, comment: foundComment});
                 }
@@ -66,10 +71,11 @@ router.put("/:comment_id", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComm
    var commentToBeEdited = req.body.comment;
    commentToBeEdited.body = req.sanitize(commentToBeEdited.body);
    Comment.findByIdAndUpdate(req.params.comment_id, commentToBeEdited, function(err, foundComment){
-       if(err){
-            console.log(err);
+       if(err || !foundComment){
+            req.flash("error", "Comment not found");
             res.redirect("back");
         } else {
+            req.flash("success", "Comment updated successfully");
             res.redirect("/campgrounds/" + req.params.id );
         }
     });
@@ -78,10 +84,11 @@ router.put("/:comment_id", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComm
 // Delete an specific comment
 router.delete("/:comment_id", middlewareObj.isLoggedIn, middlewareObj.isOwnerOfComment, function(req, res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err, foundCamp){
-        if(err){
-            console.log(err);
+        if(err || !foundCamp){
+             req.flash("error", "Campground not found");
             res.redirect("back");
         } else{
+             req.flash("success", "Comment deleted successfully");
              res.redirect("/campgrounds/" + req.params.id);  
         }
        

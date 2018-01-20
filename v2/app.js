@@ -6,7 +6,8 @@ var express         = require("express"),
     methodOverride  = require("method-override"),
     passport        = require("passport"),
     localStrategy   = require("passport-local"),
-    moment          = require('moment'),
+    moment          = require("moment"),
+    flash           = require("connect-flash"),
     User            = require("./models/User"),
     Campground      = require("./models/Campground"),
     Comment         = require("./models/Comment"),
@@ -29,6 +30,7 @@ mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, functi
 
 app.set("view engine", "ejs");
 app.locals.moment = require('moment');
+app.use(flash());
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
@@ -47,7 +49,9 @@ passport.deserializeUser(User.deserializeUser());
 passport.use(new localStrategy(User.authenticate()));
 // save logged user to be used on some views
 app.use(function(req, res, next){ 
-    res.locals.currentUser = req.user;
+    res.locals.currentUser  = req.user;
+    res.locals.error        = req.flash("error");
+    res.locals.success      = req.flash("success");
     next();
 });
 app.use("/", authRoutes);
@@ -60,7 +64,7 @@ app.get("/", function(req, res){
 
 app.get("*", function(req, res){
     res.send("Route not defined");
-})
+});
 
 
 app.listen(process.env.PORT, process.env.IP, function(){
