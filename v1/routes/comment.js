@@ -24,7 +24,7 @@ router.post("/", middlewareObj.isLoggedIn, function(req, res){
                     createdComment.author.id = req.user.id;
                     createdComment.author.username = req.user.username;
                     createdComment.save();
-                    foundCamp.comments.push(createdComment);
+                    foundCamp.comments.push(createdComment._id);
                     foundCamp.save();
                     req.flash("success", "Comment posted successfully!");
                 }
