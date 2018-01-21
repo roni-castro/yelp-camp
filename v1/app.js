@@ -19,14 +19,20 @@ var commentRoutes   = require("./routes/comment"),
     authRoutes      = require("./routes/authentication");
     
 //seedDB();
-mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true}, function(err){
+console.log("Using Database set in the environment variable DATABASE_URL: ", process.env.DATABASE_URL);
+var databaseUrl = process.env.DATABASE_URL || "mongodb://localhost/yelp_camp"
+mongoose.connect(databaseUrl, function(err){
     if (err){
         throw err;
     } else{
         console.log('Mongo DB is connected');
     }
 });
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
+
 
 app.set("view engine", "ejs");
 app.locals.moment = require('moment');
