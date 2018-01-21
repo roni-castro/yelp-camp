@@ -62,7 +62,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
         id: req.user.id,
         username: req.user.username
     }
-    var campgroundToBeCreated = {name:name, photo:photo, desc:desc, author:author};
+    var campgroundToBeCreated = {name:name, price: price, photo:photo, desc:desc, author:author};
     Campground.create(campgroundToBeCreated, function(err, camp){
         if(err){
             req.flash("error", err.message);
