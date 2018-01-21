@@ -52,11 +52,12 @@ router.get("/:id", function(req, res){
 
 // Create a new Campground
 router.post("/", middleware.isLoggedIn, function(req, res){
-    var post = req.body.post;
-    post.desc = req.sanitize(post.desc);
-    var name = post.name;
-    var desc = post.desc;
-    var photo = post.photo;
+    var camp = req.body.camp;
+    camp.desc = req.sanitize(camp.desc);
+    var price = camp.price;
+    var name = camp.name;
+    var desc = camp.desc;
+    var photo = camp.photo;
     var author = {
         id: req.user.id,
         username: req.user.username
@@ -77,8 +78,8 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 
 // Update Campground
 router.put("/:id", middleware.isLoggedIn, middleware.isOwnerOfCampground, function(req, res){
-    req.body.post.desc = req.sanitize(req.body.post.desc);
-    Campground.findByIdAndUpdate(req.params.id, req.body.post, function(err, foundCamp){
+    req.body.camp.desc = req.sanitize(req.body.camp.desc);
+    Campground.findByIdAndUpdate(req.params.id, req.body.camp, function(err, foundCamp){
        if(err){
             req.flash("error", err.message);
             res.redirect("back");

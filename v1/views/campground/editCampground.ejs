@@ -5,21 +5,21 @@
            <div class="form-row">
                 <div class="form-group">
                      <label for="name">Camp name:</label>
-                    <input name="post[name]" class="form-control" type="text" value="<%= camp.name%>"></input>
+                    <input name="camp[name]" class="form-control" type="text" value="<%= camp.name%>"></input>
                 </div>
-            </div>
-            <div class="form-row">
+                 <div class="form-group">
+                     <label>Price:</label>
+                    <input name="camp[price]" class="form-control" type="number"
+                           min="0" max="100000000" step="0.01" placeholder="0.00" value="<%= camp.price%>"></input>
+                </div>
                 <div class="form-group">
                     <label for="photo">Photo url:</label>
-                    <input name="post[photo]" class="form-control" type="text" value="<%= camp.photo%>"></input>
+                    <input name="camp[photo]" class="form-control" type="text" value="<%= camp.photo%>"></input>
                 </div>
-           </div>
-           <div class="form-row">
-               <div class="form-group">
+                <div class="form-group">
                     <label for="desc">Description:</label>   
-                    <textarea class="form-control" rows="6" name="post[desc]"><%= camp.desc%></textarea>
+                    <textarea class="form-control" rows="6" name="camp[desc]"><%= camp.desc%></textarea>
                 </div>
-           </div>
            <button type="submit" class="btn btn-primary btn-block">Save</button>
            <div class="text-left">
                 <a href="/campgrounds">Back</a>
